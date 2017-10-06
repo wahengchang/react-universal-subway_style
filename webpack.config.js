@@ -15,6 +15,7 @@ const vendor = [
   'react-redux',
   'react-router-dom',
   'redux-thunk',
+  'react-helmet',
   'lodash',
   'babel-polyfill'
 ];
@@ -107,7 +108,7 @@ const config = {
                 modules: true,
                 importLoaders: 1,
                 localIdentName: '[local]',
-                minify: true
+                minimize: true
               }
             },
             {
@@ -128,21 +129,13 @@ const config = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.NamedModulesPlugin()
   ] : [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) } }),
     new AssetsPlugin({ filename: 'webpack-assets.json' }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
-    new ExtractTextPlugin({
-      filename: '[name].[chunkhash:8].css',
-      disable: false,
-      allChunks: true
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false }
-    })
+    new ExtractTextPlugin({ filename: '[name].[chunkhash:8].css', disable: false, allChunks: true }),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.optimize.UglifyJsPlugin({ comments: false, compress: { warnings: false } })
   ]
 };
 
