@@ -6,8 +6,10 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { StaticRouter, Route, Switch, matchPath } from 'react-router-dom';
 import sass from 'node-sass';
+import _ from 'lodash';
 import routes from './routes';
 import configureStore from './store';
+import assets from '../webpack-assets.json';
 
 const theme = sass.renderSync({
   file: 'node_modules/grommet/scss/vanilla/index.scss',
@@ -15,9 +17,11 @@ const theme = sass.renderSync({
 });
 
 const renderFullPage = (html, preloadedState) => {
-  let vendorJS = ''; let bundleCSS = '';
+  let vendorJS = ''; let bundleCSS = ''; let bundleJS = '/bundle.js';
   if (process.env.NODE_ENV !== 'development') {
-    bundleCSS = '/bundle.css'; vendorJS = '/vendor.js';
+    bundleJS = assets.bundle.js;
+    bundleCSS = assets.bundle.css;
+    vendorJS = assets.vendor.js;
   }
   return `
     <!DOCTYPE html>
@@ -33,7 +37,7 @@ const renderFullPage = (html, preloadedState) => {
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
         </script>
         <script src=${vendorJS}></script>
-        <script src="/bundle.js"></script>
+        <script src=${bundleJS}></script>
       </body>
     </html>
     `;
@@ -61,7 +65,7 @@ function serverRender(req, res) {
           <StaticRouter location={req.url} context={context}>
             <Switch>
               {
-                routes.map((route, index) => <Route key={`route${index}`} {...route} />)
+                routes.map(route => <Route key={_.uniqueId()} exact={route.exact || false} path={route.path} render={props => (<route.component {...props} routes={route.routes || null} />)} />)
               }
             </Switch>
           </StaticRouter>
@@ -73,6 +77,10 @@ function serverRender(req, res) {
       }
       const status = context.status === '404' ? 404 : 200;
       res.status(status).send(renderFullPage(componentStr, store.getState()));
+    })
+    .catch((err) => {
+      res.status(404).send('Not Found :(');
+      console.error(`==> 😭  Rendering routes error: ${err}`);
     });
 }
 

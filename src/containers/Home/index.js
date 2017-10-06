@@ -12,8 +12,8 @@ const usersid = '123'; const usersname = 'View';
 
 const Home = () => (<div className="grommet myclass">
   <div style={{ maxWidth: 1092, padding: '2em', margin: '0 auto' }}>
-    <Heading tag="h1" margin="medium" strong>React Universal</Heading>
-    <Headline size="small" margin="small">Brought To You In Subway Style</Headline>
+    <Heading tag="h1" margin="medium" strong>Header Text</Heading>
+    <Headline size="small" margin="small">Some underlying text here</Headline>
     <Paragraph size="medium">
       Raised on hip-hop and foster care, defiant city kid Ricky
     gets a fresh start in the New Zealand countryside. He quickly finds himself

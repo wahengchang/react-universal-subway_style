@@ -3,6 +3,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isDev = nodeEnv !== 'production';
@@ -39,7 +40,7 @@ const config = {
   entry: getEntry(),
   output: {
     path: resolve(__dirname, 'public'),
-    filename: isDev ? 'bundle.js' : '[name].js',
+    filename: isDev ? 'bundle.js' : '[name].[chunkhash:8].js',
     publicPath: '/'
   },
   module: {
@@ -132,9 +133,10 @@ const config = {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
+    new AssetsPlugin({ filename: 'webpack-assets.json' }),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
     new ExtractTextPlugin({
-      filename: '[name].css',
+      filename: '[name].[chunkhash:8].css',
       disable: false,
       allChunks: true
     }),
