@@ -44,8 +44,8 @@ const config = {
   cache: isDev,
   output: {
     path: resolve(__dirname, 'public'),
-    filename: isDev ? 'bundle.js' : '[name].[chunkhash].js',
-    chunkFilename: isDev ? 'bundle.js' : '[name].[chunkhash].js',
+    filename: isDev ? 'bundle.js' : '[name].[chunkhash:8].js',
+    chunkFilename: isDev ? 'bundle.js' : '[name].[chunkhash:8].js',
     publicPath: '/'
   },
   module: {
@@ -140,7 +140,7 @@ const config = {
     new webpack.HashedModuleIdsPlugin(),
     new WebpackChunkHash(),
     new ChunkManifestPlugin({ filename: 'chunk-manifest.json', manifestVariable: 'webpackManifest' }),
-    new ExtractTextPlugin({ filename: '[name].[chunkhash].css', disable: false, allChunks: true }),
+    new ExtractTextPlugin({ filename: '[name].[chunkhash:8].css', disable: false, allChunks: true }),
     new webpack.optimize.UglifyJsPlugin({ mangle: true, compress: { warnings: false, pure_getters: true, unsafe: true, unsafe_comps: true, screw_ie8: true }, output: { comments: false }, exclude: [/\.min\.js$/gi] }),
     new AssetsPlugin({ filename: 'webpack-assets.json' })
   ]
