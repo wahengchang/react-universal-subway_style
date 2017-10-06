@@ -4,12 +4,13 @@
   "description": "react redux unviersal subway-style boilerplate",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf public && better-npm-run build",
-    "start": "npm run build && better-npm-run start:prod",
-    "dev": "rimraf public && better-npm-run start"
+    "start": "npm run build && better-npm-run start",
+    "build": "better-npm-run clean && better-npm-run build",
+    "dev": "better-npm-run dev",
+    "clean": "better-npm-run clean"
   },
   "betterScripts": {
-    "start": {
+    "dev": {
       "command": "babel-node ./src/server.js",
       "env": {
         "NODE_PATH": "./src",
@@ -17,13 +18,16 @@
         "PORT": 3000
       }
     },
-    "start:prod": {
+    "start": {
       "command": "node ./src/server.js",
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
         "PORT": 8080
       }
+    },
+    "clean": {
+      "command": "rimraf public webpack-assets.json"
     },
     "build": {
       "command": "webpack --progress --hide-modules --config ./webpack.config.js",
