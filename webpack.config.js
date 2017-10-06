@@ -2,6 +2,8 @@
 
 const { resolve } = require('path');
 const webpack = require('webpack');
+const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
+const WebpackChunkHash = require('webpack-chunk-hash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 
@@ -14,10 +16,10 @@ const vendor = [
   'redux',
   'react-redux',
   'react-router-dom',
-  'redux-thunk',
+  'redux-saga',
   'react-helmet',
   'lodash',
-  'babel-polyfill'
+  'babel-polyfill',
 ];
 
 const getEntry = () => {
@@ -39,9 +41,11 @@ const getEntry = () => {
 const config = {
   devtool: isDev ? 'cheap-eval-source-map' : '',
   entry: getEntry(),
+  cache: isDev,
   output: {
     path: resolve(__dirname, 'public'),
-    filename: isDev ? 'bundle.js' : '[name].[chunkhash:8].js',
+    filename: isDev ? 'bundle.js' : '[name].[chunkhash].js',
+    chunkFilename: isDev ? 'bundle.js' : '[name].[chunkhash].js',
     publicPath: '/'
   },
   module: {
@@ -129,13 +133,16 @@ const config = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.NamedModulesPlugin()
   ] : [
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) } }),
-    new AssetsPlugin({ filename: 'webpack-assets.json' }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
-    new ExtractTextPlugin({ filename: '[name].[chunkhash:8].css', disable: false, allChunks: true }),
-    new webpack.optimize.OccurrenceOrderPlugin(true),
-    new webpack.optimize.UglifyJsPlugin({ comments: false, compress: { warnings: false } })
+    new webpack.optimize.CommonsChunkPlugin({ name: ['vendor', 'manifest'], minChunks: Infinity }),
+    new webpack.HashedModuleIdsPlugin(),
+    new WebpackChunkHash(),
+    new ChunkManifestPlugin({ filename: 'chunk-manifest.json', manifestVariable: 'webpackManifest' }),
+    new ExtractTextPlugin({ filename: '[name].[chunkhash].css', disable: false, allChunks: true }),
+    new webpack.optimize.UglifyJsPlugin({ mangle: true, compress: { warnings: false, pure_getters: true, unsafe: true, unsafe_comps: true, screw_ie8: true }, output: { comments: false }, exclude: [/\.min\.js$/gi] }),
+    new AssetsPlugin({ filename: 'webpack-assets.json' })
   ]
 };
 
