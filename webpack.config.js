@@ -14,11 +14,11 @@ const vendor = [
   'react',
   'react-dom',
   'redux',
+  'lodash',
   'react-redux',
   'react-router-dom',
   'redux-saga',
   'react-helmet',
-  'lodash',
   'babel-polyfill',
 ];
 

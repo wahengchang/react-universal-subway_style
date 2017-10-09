@@ -1,6 +1,7 @@
 import 'babel-polyfill';
 
 import React from 'react';
+import Helmet from 'react-helmet';
 import { resolve } from 'path';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
@@ -8,6 +9,7 @@ import { StaticRouter, Route, Switch, matchPath } from 'react-router-dom';
 import sass from 'node-sass';
 import _ from 'lodash';
 import routes from './routes';
+import helmetconfig from './helmetConfig';
 import configureStore from './store';
 import assets from '../webpack-assets.json';
 
@@ -17,17 +19,25 @@ const theme = sass.renderSync({
 });
 
 const renderFullPage = (html, preloadedState) => {
-  let vendorJS = ''; let bundleCSS = ''; let bundleJS = '/bundle.js';
+  const head = Helmet.rewind();
+  let manifestJS = ''; let vendorJS = ''; let bundleCSS = ''; let bundleJS = '/bundle.js';
   if (process.env.NODE_ENV !== 'development') {
     bundleJS = assets.bundle.js;
     bundleCSS = assets.bundle.css;
     vendorJS = assets.vendor.js;
+    manifestJS = assets.manifest.js;
   }
   return `
     <!DOCTYPE html>
-    <html>
+    <html ${head.htmlAttributes.toString()}>
       <head>
-        <title>React Universal Subway Style</title>
+        <meta charSet="utf-8" />
+        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        ${head.title.toString()}
+        ${head.base.toString()}
+        ${head.meta.toString()}
+        ${head.link.toString()}
         <link rel="stylesheet" type="text/css" href=${bundleCSS}>
         <style>${theme.css}</style>
       </head>
@@ -38,6 +48,7 @@ const renderFullPage = (html, preloadedState) => {
         </script>
         <script src=${vendorJS}></script>
         <script src=${bundleJS}></script>
+        <script src=${manifestJS}></script>
       </body>
     </html>
     `;
@@ -63,11 +74,10 @@ function serverRender(req, res) {
       const componentStr = renderToString(
         <Provider store={store}>
           <StaticRouter location={req.url} context={context}>
-            <Switch>
-              {
-                routes.map(route => <Route key={_.uniqueId()} exact={route.exact || false} path={route.path} render={props => (<route.component {...props} routes={route.routes || null} />)} />)
-              }
-            </Switch>
+            <div>
+              <Helmet {...helmetconfig} />
+              <Switch>{routes.map(route => <Route key={_.uniqueId()} exact={route.exact || false} path={route.path} render={props => (<route.component {...props} routes={route.routes || null} />)} />)}</Switch>
+            </div>
           </StaticRouter>
         </Provider>);
       if (context.url) {

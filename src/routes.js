@@ -1,5 +1,5 @@
 import Home from './containers/Home';
-// import { fetchDataIfNeeded } from './containers/Home/action';
+import { fetchData } from './containers/Home/action';
 import NotFound from './containers/NotFound';
 
 export default [
@@ -7,6 +7,9 @@ export default [
     path: '/',
     component: Home,
     exact: true,
+    loadData: dispatch => Promise.all([
+      dispatch(fetchData()),
+    ]),
   },
   {
     path: '/UserInfo/:id',

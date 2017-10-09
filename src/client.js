@@ -3,9 +3,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import _ from 'lodash';
+import Helmet from 'react-helmet';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import 'grommet/scss/vanilla/index.scss';
 import routes from './routes';
+import helmetconfig from './helmetConfig';
 import configureStore from './store';
 import './styles/style.css';
 
@@ -19,11 +20,10 @@ const store = configureStore(initState);
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <Switch>
-        {
-          routes.map(route => <Route key={_.uniqueId()} exact={route.exact || false} path={route.path} render={props => (<route.component {...props} routes={route.routes || null} />)} />)
-        }
-      </Switch>
+      <div>
+        <Helmet {...helmetconfig} />
+        <Switch>{routes.map(route => <Route key={_.uniqueId()} exact={route.exact || false} path={route.path} render={props => (<route.component {...props} routes={route.routes || null} />)} />)}</Switch>
+      </div>
     </BrowserRouter>
   </Provider>,
   element,

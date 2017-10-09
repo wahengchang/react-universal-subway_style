@@ -1,33 +1,101 @@
-import React from 'react';
-// import { Link } from 'react-router-dom';
-// import Helmet from 'react-helmet';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Card from 'grommet/components/Card';
-import Anchor from 'grommet/components/Anchor';
-import NextIcon from 'grommet/components/icons/base/Next';
 import Heading from 'grommet/components/Heading';
-import Headline from 'grommet/components/Headline';
 import Paragraph from 'grommet/components/Paragraph';
+import Button from 'grommet/components/Button';
+import Box from 'grommet/components/Box';
+import Helmet from 'react-helmet';
+import Edit from 'grommet/components/icons/base/Edit';
+import { fetchData } from './action';
 
-const usersid = '123'; const usersname = 'View';
+class Home extends PureComponent {
+  componentDidMount() {
+    this.props.fetchDataFunc();
+  }
 
-const Home = () => (<div className="grommet myclass">
-  <div style={{ maxWidth: 1092, padding: '2em', margin: '0 auto' }}>
-    <Heading tag="h1" margin="medium" strong>React Universal</Heading>
-    <Headline size="small" margin="small">Some underlying text here</Headline>
-    <Paragraph size="medium">
-      Raised on hip-hop and foster care, defiant city kid Ricky
-      gets a fresh start in the New Zealand countryside. He quickly finds himself
-      at home with his new foster family: the loving Aunt Bella, the cantankerous
-      Uncle Hec, and dog Tupac. When a tragedy strikes that threatens to ship
-    </Paragraph>
-    <Card
-      thumbnail="http://grommet.io/img/carousel-1.png"
-      label="Sample Label"
-      heading="Sample Heading"
-      contentPad="small"
-      link={<Anchor path={`/UserInfo/${usersid}`} primary animateIcon label={usersname} reverse icon={<NextIcon />} />}
-    />
-  </div>
-</div>);
+  render() {
+    const { home, fetchDataFunc } = this.props;
+    return (<div className="grommet">
+      <Helmet title="Home" />
+      <div className="container-color">
+        <div className="myclass">
+          <Heading tag="h1" margin="medium" strong>{home.message}</Heading><Heading tag="h2" margin="medium">Served in {home.data}</Heading>
+          <Paragraph size="medium">
+            Raised on hip-hop and foster care, defiant city kid Ricky
+            gets a fresh start in the New Zealand countryside. He quickly finds himself
+            at home with his new foster family
+          </Paragraph>
+        </div>
+      </div>
+      <div className="myclass">
+        <Box direction="row" justify="start" align="start" wrap={false} pad="none" margin="none">
+          <Card
+            thumbnail="http://grommet.io/img/carousel-1.png"
+            heading="Sample Heading"
+            contentPad="small"
+            margin="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
+          />
+          <Card
+            thumbnail="http://grommet.io/img/carousel-1.png"
+            heading="Sample Heading"
+            contentPad="small"
+            margin="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
+          />
+          <Card
+            thumbnail="http://grommet.io/img/carousel-1.png"
+            heading="Sample Heading"
+            contentPad="small"
+            margin="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
+          />
+        </Box>
+      </div>
+      <div className="myclass">
+        <Box direction="row" justify="start" align="start" wrap={false} pad="none" margin="none">
+          <Card
+            thumbnail="http://grommet.io/img/carousel-1.png"
+            heading="Sample Heading"
+            margin="small"
+            contentPad="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
+          />
+          <Card
+            thumbnail="http://grommet.io/img/carousel-1.png"
+            heading="Sample Heading"
+            margin="small"
+            contentPad="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
+          />
+          <Card
+            thumbnail="http://grommet.io/img/carousel-1.png"
+            heading="Sample Heading"
+            margin="small"
+            contentPad="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
+          />
+        </Box>
+        {home.ctr ? <Heading>{home.ctr}</Heading> : null}
+      </div>
+    </div>);
+  }
+}
 
-export default Home;
+Home.propTypes = {
+  home: PropTypes.shape({ message: PropTypes.string }),
+  fetchDataFunc: PropTypes.func.isRequired,
+};
+
+Home.defaultProps = {
+  home: { message: '' },
+};
+
+export default connect(
+  ({ home }) => ({ home }),
+  dispatch => ({
+    fetchDataFunc: () => dispatch(fetchData()),
+  }),
+)(Home);
