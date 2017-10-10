@@ -12,10 +12,6 @@ export default [
     ]),
   },
   {
-    path: '/UserInfo/:id',
-    component: NotFound,
-  },
-  {
     path: '*',
     component: NotFound,
   },
