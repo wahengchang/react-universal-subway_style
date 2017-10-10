@@ -18,7 +18,7 @@ app.use(require('express').static('public'));
 
 if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack');
-  const config = require('../webpack.config');
+  const config = require('../../webpack.config');
   const devMiddleware = require('webpack-dev-middleware');
   const hotDevMiddleware = require('webpack-hot-middleware');
   const compiler = webpack(config);

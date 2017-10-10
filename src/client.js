@@ -6,8 +6,8 @@ import _ from 'lodash';
 import Helmet from 'react-helmet';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import routes from './routes';
-import helmetconfig from './helmetConfig';
-import configureStore from './store';
+import helmetconfig from './appConfig';
+import configureStore from './redux/store';
 import './styles/style.css';
 
 const element = document.getElementById('app-container');

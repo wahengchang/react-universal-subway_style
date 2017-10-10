@@ -1,5 +1,6 @@
-import 'babel-polyfill';
+/* eslint-disable import/no-unresolved */
 
+import 'babel-polyfill';
 import React from 'react';
 import Helmet from 'react-helmet';
 import { resolve } from 'path';
@@ -8,24 +9,23 @@ import { Provider } from 'react-redux';
 import { StaticRouter, Route, Switch, matchPath } from 'react-router-dom';
 import sass from 'node-sass';
 import _ from 'lodash';
-import routes from './routes';
-import helmetconfig from './helmetConfig';
-import configureStore from './store';
-import assets from '../webpack-assets.json';
+import routes from '../routes';
+import helmetconfig from '../appConfig';
+import configureStore from '../redux/store';
+import assets from '../../webpack-assets.json';
 
 const theme = sass.renderSync({
   file: 'node_modules/grommet/scss/vanilla/index.scss',
-  includePaths: [resolve(__dirname, '../node_modules')],
+  includePaths: [resolve(__dirname, '../../node_modules')],
 });
 
 const renderFullPage = (html, preloadedState) => {
   const head = Helmet.rewind();
-  let manifestJS = ''; let vendorJS = ''; let bundleCSS = ''; let bundleJS = '/bundle.js';
+  let vendorJS = ''; let bundleCSS = ''; let bundleJS = '/bundle.js';
   if (process.env.NODE_ENV !== 'development') {
     bundleJS = assets.bundle.js;
     bundleCSS = assets.bundle.css;
     vendorJS = assets.vendor.js;
-    manifestJS = assets.manifest.js;
   }
   return `
     <!DOCTYPE html>
@@ -48,7 +48,6 @@ const renderFullPage = (html, preloadedState) => {
         </script>
         <script src=${vendorJS}></script>
         <script src=${bundleJS}></script>
-        <script src=${manifestJS}></script>
       </body>
     </html>
     `;
