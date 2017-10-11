@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter, Route, Switch, matchPath } from 'react-router-dom';
 import sass from 'node-sass';
 import _ from 'lodash';
+import serialize from 'serialize-javascript';
 import routes from '../routes';
 import helmetconfig from '../appConfig';
 import configureStore from '../redux/store';
@@ -17,6 +18,7 @@ import assets from '../../webpack-assets.json';
 const theme = sass.renderSync({
   file: 'node_modules/grommet/scss/vanilla/index.scss',
   includePaths: [resolve(__dirname, '../../node_modules')],
+  outputStyle: 'compressed',
 });
 
 const renderFullPage = (html, preloadedState) => {
@@ -43,9 +45,7 @@ const renderFullPage = (html, preloadedState) => {
       </head>
       <body>
         <div id="app-container">${`<div>${html}</div>`}</div>
-        <script>
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
-        </script>
+        <script>window.__PRELOADED_STATE__ = ${serialize(preloadedState, { isJSON: true })}</script>
         <script src=${vendorJS}></script>
         <script src=${bundleJS}></script>
       </body>
