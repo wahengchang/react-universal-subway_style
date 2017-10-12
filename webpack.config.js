@@ -14,12 +14,15 @@ const vendor = [
   'react',
   'react-dom',
   'redux',
+  'axios',
   'lodash',
+  'redux-saga',
   'react-redux',
   'react-router-dom',
-  'redux-saga',
   'react-helmet',
   'babel-polyfill',
+  'jsonwebtoken',
+  'urlencode'
 ];
 
 const getEntry = () => {

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
 import 'babel-polyfill';
 import React from 'react';
 import Helmet from 'react-helmet';
@@ -44,7 +42,7 @@ const renderFullPage = (html, preloadedState) => {
         <style>${theme.css}</style>
       </head>
       <body>
-        <div id="app-container">${`<div>${html}</div>`}</div>
+        <div id="app-container">${html}</div>
         <script>window.__PRELOADED_STATE__ = ${serialize(preloadedState, { isJSON: true })}</script>
         <script src=${vendorJS}></script>
         <script src=${bundleJS}></script>

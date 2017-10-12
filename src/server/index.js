@@ -4,9 +4,12 @@ const express = require('express');
 const compression = require('compression');
 const helmet = require('helmet');
 const hpp = require('hpp');
+const cors = require('cors');
+const apiMiddleware = require('../apiMiddleware');
+const authCheck = require('./authCheck');
+const { port, host } = require('../appConfig');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 require('css-modules-require-hook')({ generateScopedName: '[name]__[local]___[hash:base64:5]' });
 
@@ -31,6 +34,18 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotDevMiddleware(compiler));
 }
 
+const whitelist = [`http://${host}`, 'https://www.yourdomain.com'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if ((whitelist.indexOf(origin) !== -1) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use('/api', cors(corsOptions), authCheck, apiMiddleware);
 app.get('*', require('./renderServerSide'));
 
 if (port) {

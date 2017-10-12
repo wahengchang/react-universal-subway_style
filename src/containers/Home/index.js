@@ -8,13 +8,20 @@ import Button from 'grommet/components/Button';
 import Box from 'grommet/components/Box';
 import Helmet from 'react-helmet';
 import Edit from 'grommet/components/icons/base/Edit';
-import { fetchData } from './action';
+import { fetchData, jwtDispatch } from './action';
 
+const thumbnailImg = 'https://lorempixel.com/400/200/sports/';
 class Home extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.googleLogin = this.googleLogin.bind(this);
+  }
   componentDidMount() {
     this.props.fetchDataFunc();
   }
-
+  googleLogin() {
+    this.props.jwtDispatchFunc();
+  }
   render() {
     const { home, fetchDataFunc } = this.props;
     return (<div className="grommet">
@@ -25,28 +32,28 @@ class Home extends PureComponent {
           <Paragraph size="medium">
             Raised on hip-hop and foster care, defiant city kid Ricky
             gets a fresh start in the New Zealand countryside. He quickly finds himself
-            at home with his new foster family
+            at home with his new foster family {home.jwtdata}
           </Paragraph>
         </div>
       </div>
       <div className="myclass">
         <Box direction="row" justify="start" align="start" wrap={false} pad="none" margin="none">
           <Card
-            thumbnail="http://grommet.io/img/carousel-1.png"
+            thumbnail={thumbnailImg}
+            heading="Sample Heading"
+            contentPad="small"
+            margin="small"
+            link={<Button icon={<Edit />} label="Fetch Data" onClick={this.googleLogin} critical={false} accent plain />}
+          />
+          <Card
+            thumbnail={thumbnailImg}
             heading="Sample Heading"
             contentPad="small"
             margin="small"
             link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
           />
           <Card
-            thumbnail="http://grommet.io/img/carousel-1.png"
-            heading="Sample Heading"
-            contentPad="small"
-            margin="small"
-            link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
-          />
-          <Card
-            thumbnail="http://grommet.io/img/carousel-1.png"
+            thumbnail={thumbnailImg}
             heading="Sample Heading"
             contentPad="small"
             margin="small"
@@ -57,21 +64,21 @@ class Home extends PureComponent {
       <div className="myclass">
         <Box direction="row" justify="start" align="start" wrap={false} pad="none" margin="none">
           <Card
-            thumbnail="http://grommet.io/img/carousel-1.png"
+            thumbnail={thumbnailImg}
             heading="Sample Heading"
             margin="small"
             contentPad="small"
             link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
           />
           <Card
-            thumbnail="http://grommet.io/img/carousel-1.png"
+            thumbnail={thumbnailImg}
             heading="Sample Heading"
             margin="small"
             contentPad="small"
             link={<Button icon={<Edit />} label="Fetch Data" onClick={fetchDataFunc} critical={false} accent plain />}
           />
           <Card
-            thumbnail="http://grommet.io/img/carousel-1.png"
+            thumbnail={thumbnailImg}
             heading="Sample Heading"
             margin="small"
             contentPad="small"
@@ -87,6 +94,7 @@ class Home extends PureComponent {
 Home.propTypes = {
   home: PropTypes.shape({ message: PropTypes.string }),
   fetchDataFunc: PropTypes.func.isRequired,
+  jwtDispatchFunc: PropTypes.func.isRequired,
 };
 
 Home.defaultProps = {
@@ -96,6 +104,7 @@ Home.defaultProps = {
 export default connect(
   ({ home }) => ({ home }),
   dispatch => ({
+    jwtDispatchFunc: () => dispatch(jwtDispatch()),
     fetchDataFunc: () => dispatch(fetchData()),
   }),
 )(Home);

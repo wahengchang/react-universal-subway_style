@@ -21,7 +21,7 @@ render(
   <Provider store={store}>
     <BrowserRouter>
       <div>
-        <Helmet {...helmetconfig} />
+        <Helmet {...helmetconfig.header} />
         <Switch>{routes.map(route => <Route key={_.uniqueId()} exact={route.exact || false} path={route.path} render={props => (<route.component {...props} routes={route.routes || null} />)} />)}</Switch>
       </div>
     </BrowserRouter>
