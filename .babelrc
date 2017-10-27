@@ -1,18 +1,19 @@
 {
   "presets":[
-      "env", "react", "stage-0", "es2015"
+      "env", "react", "es2015", "stage-0"
   ],
    "compact" : true,
   "env": {
     "development": {
-      "presets": ["env", "react", "stage-0", "es2015"],
-      "plugins": ["transform-runtime", "transform-object-rest-spread"],
+      "presets": ["env", "react", "es2015", "stage-0"],
+      "plugins": ["transform-runtime", "transform-object-rest-spread", "transform-object-assign", "transform-class-properties"],
       "presets": ["react-hmre"]
     }
   },
   "env": {
     "build": {
-      "presets": ["env", "react", "stage-0", "es2015"]
+      "presets": ["env", "react", "es2015", "stage-0"],
+      "plugins": ["transform-object-assign"]
     }
   }
 }

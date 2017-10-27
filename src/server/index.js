@@ -3,8 +3,13 @@ const morgan = require('morgan');
 const express = require('express');
 const compression = require('compression');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const session = require('cookie-session');
+const bodyParser = require('body-parser');
 const hpp = require('hpp');
 const cors = require('cors');
+const passport = require('passport');
+const flash = require('connect-flash');
 const apiMiddleware = require('../apiMiddleware');
 const authCheck = require('./authCheck');
 const { port, host } = require('../appConfig');
@@ -12,12 +17,21 @@ const { port, host } = require('../appConfig');
 const app = express();
 
 require('css-modules-require-hook')({ generateScopedName: '[name]__[local]___[hash:base64:5]' });
+require('../authMiddleware/passport')(passport);
 
 app.use(helmet());
 app.use(hpp());
 app.use(compression());
 app.use(morgan('dev', { skip: (req, res) => res.statusCode < 400 }));
-app.use(require('express').static('public'));
+app.use(express.static('public'));
+
+// required for passport (check which ones are peer dependency)
+app.use(cookieParser());
+app.use(bodyParser.json()); app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({ secret: 'ilovescotch' }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack');
@@ -34,7 +48,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotDevMiddleware(compiler));
 }
 
-const whitelist = [`http://${host}`, 'https://www.yourdomain.com'];
+// const corsOptions = { origin: apiConfig.apiURL, optionsSuccessStatus: 200 };
+const whitelist = [`http://${host}`, 'https://beckfriends.herokuapp.com', 'http://beckfriends.herokuapp.com'];
 const corsOptions = {
   origin: (origin, callback) => {
     if ((whitelist.indexOf(origin) !== -1) || !origin) {
@@ -44,6 +59,13 @@ const corsOptions = {
     }
   },
 };
+
+app.all('/*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+app.use('/auth', cors(corsOptions), require('../authMiddleware/index'));
 
 app.use('/api', cors(corsOptions), authCheck, apiMiddleware);
 app.get('*', require('./renderServerSide'));

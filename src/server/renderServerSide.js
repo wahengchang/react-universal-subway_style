@@ -11,7 +11,6 @@ import serialize from 'serialize-javascript';
 import routes from '../routes';
 import helmetconfig from '../appConfig';
 import configureStore from '../redux/store';
-import assets from '../../webpack-assets.json';
 
 const theme = sass.renderSync({
   file: 'node_modules/grommet/scss/vanilla/index.scss',
@@ -23,6 +22,7 @@ const renderFullPage = (html, preloadedState) => {
   const head = Helmet.rewind();
   let vendorJS = ''; let bundleCSS = ''; let bundleJS = '/bundle.js';
   if (process.env.NODE_ENV !== 'development') {
+    const assets = require('../../webpack-assets.json');
     bundleJS = assets.bundle.js;
     bundleCSS = assets.bundle.css;
     vendorJS = assets.vendor.js;
