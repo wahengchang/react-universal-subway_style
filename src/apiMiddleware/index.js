@@ -6,8 +6,8 @@ const Observable = require('rxjs').Observable;
 
 rxFirebase.extend(firebase, Observable);
 firebase.initializeApp({
-  databaseURL: 'https://beck-adminsdk.firebaseio.com',
-  storageBucket: 'beck-adminsdk.appspot.com',
+  databaseURL: 'https://yourfirebaseapp.firebaseio.com',
+  storageBucket: 'yourfirebaseapp.appspot.com',
   credential: firebase.credential.cert(require('../path-to-firebase-adminsdk.json')),
 });
 
