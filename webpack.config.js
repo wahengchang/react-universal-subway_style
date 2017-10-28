@@ -22,7 +22,6 @@ const vendor = [
   'react-helmet',
   'babel-polyfill',
   'jsonwebtoken',
-  'urlencode'
 ];
 
 const getEntry = () => {
