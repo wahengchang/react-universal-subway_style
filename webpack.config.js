@@ -55,18 +55,18 @@ const config = {
       {
         test: /\.js[x]?$/,
         enforce: 'pre',
+        exclude: /(node_modules|bower_components)/,
         use: [
           {
             loader: 'eslint-loader',
             options: { fix: true }
           }
-        ],
-        exclude: '/node_modules/'
+        ]
       },
       {
         test: /\.js$/,
-        use: ['babel-loader'],
-        exclude: '/node_modules/'
+        exclude: /(node_modules|bower_components)/,
+        use: ['babel-loader']
       },
       {
         test: /\.scss$/,
