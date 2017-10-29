@@ -3,12 +3,12 @@
 
 If you have landed here, you would have come through some form of invitation to the link. So thank you!
 
-We are building this starter together (with a few others from Yahoo, Netflix, Uber & AirBnb) and are trying to turn it into the most secure, fastest & most optimised React starter on the planet. A few questions then I guess
+We are building this ogether (with a few others from Yahoo, Netflix, Uber & AirBnb) and are trying to turn it into the most secure, fastest & most optimised React starter on the planet. A few questions then I guess
 
 ### Why such an odd name? ###
 Well, the name resonates with Subway restaurants & just like at a Subway restaurant you can mix & match your ingredients & order what you want, you shall be able to mix & match libraries, components and your repository shall be served to you in Subway style. And here, it's free! 
 
-### What's up with so less documentation? ###
+### What's up with no documentation? ###
 We are actively developing it currently and there will be articles and tutorials around the technologies, setting up your own repository with the ones you want. But if you are one of the those smarter ones who can look at codebases from a `package.json` or other files and figure out what's happening, you should be able to get started right away
 
 So Welcome, have a look around!
