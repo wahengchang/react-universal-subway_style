@@ -3,7 +3,7 @@
 
 If you have landed here, you would have come through some form of invitation to the link. So thank you!
 
-We are building this ogether (with a few others from Yahoo, Netflix, Uber & AirBnb) and are trying to turn it into the most secure, fastest & most optimised React starter on the planet. A few questions then I guess
+We are building this together (with a few others from Yahoo, Netflix, Uber & AirBnb) and are trying to turn it into the most secure, fastest & most optimised React starter on the planet. A few questions then I guess
 
 ### Why such an odd name? ###
 Well, the name resonates with Subway restaurants & just like at a Subway restaurant you can mix & match your ingredients & order what you want, you shall be able to mix & match libraries, components and your repository shall be served to you in Subway style. And here, it's free! 
