@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import React from 'react';
-import { render } from 'react-dom';
+import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import _ from 'lodash';
 import Helmet from 'react-helmet';
@@ -17,7 +17,7 @@ delete window.__PRELOADED_STATE__;
 
 const store = configureStore(initState);
 
-render(
+hydrate(
   <Provider store={store}>
     <BrowserRouter>
       <div>

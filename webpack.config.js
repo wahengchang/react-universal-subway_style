@@ -12,6 +12,7 @@ const isDev = nodeEnv !== 'production';
 
 const vendor = [
   'react',
+  'prop-types',
   'react-dom',
   'redux',
   'axios',

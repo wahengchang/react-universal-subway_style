@@ -48,7 +48,6 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotDevMiddleware(compiler));
 }
 
-// const corsOptions = { origin: apiConfig.apiURL, optionsSuccessStatus: 200 };
 const whitelist = [`http://${host}`, 'https://beckfriends.herokuapp.com', 'http://beckfriends.herokuapp.com'];
 const corsOptions = {
   origin: (origin, callback) => {
